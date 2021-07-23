@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ateam05.hotel.mapper.CheckinfoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ateam05.hotel.model.domain.Checkinfo">
+        <id column="id" property="id" />
+        <result column="roomtypeid" property="roomtypeid" />
+        <result column="hotelid" property="hotelid" />
+        <result column="checkInfoDate" property="checkInfoDate" />
+        <result column="checkInDate" property="checkInDate" />
+        <result column="checkOutDate" property="checkOutDate" />
+        <result column="status" property="status" />
+        <result column="userId" property="userId" />
+        <result column="price" property="price" />
+    </resultMap>
+
+    <!-- 通过userId查询订单-->
+    <select id="querybyuserId" resultType="com.ateam05.hotel.model.dto.CheckinfoDTO">
+        select * from checkinfo where userId = #{userId}
+    </select>
+</mapper>

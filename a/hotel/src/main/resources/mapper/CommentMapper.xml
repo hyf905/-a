@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ateam05.hotel.mapper.CommentMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ateam05.hotel.model.domain.Comment">
+        <id column="id" property="id" />
+        <result column="hotelId" property="hotelId" />
+        <result column="userId" property="userId" />
+        <result column="details" property="details" />
+        <result column="checkinfoid" property="checkinfoid" />
+        <result column="rate" property="rate" />
+        <result column="photo" property="photo" />
+        <result column="date" property="date" />
+    </resultMap>
+
+    <select id="count" resultType="float">
+        select avg(rate) from comment where hotelId = #{hotelId};
+    </select>
+
+    <select id="getByHotelId" resultType="com.ateam05.hotel.model.dto.CommentDTO">
+        select * from comment where hotelId = #{hotelId};
+    </select>
+
+</mapper>

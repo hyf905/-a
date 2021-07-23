@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ateam05.hotel.mapper.SysRequestPathMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ateam05.hotel.model.domain.SysRequestPath">
+        <id column="id" property="id" />
+        <result column="url" property="url" />
+        <result column="description" property="description" />
+        <result column="method" property="method" />
+    </resultMap>
+    <!--查询单个-->
+    <select id="queryById" resultMap="BaseResultMap">
+        select
+          id, url, description
+        from sys_request_path
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="BaseResultMap">
+        select
+          id, url, description,method
+        from sys_request_path
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="BaseResultMap">
+        select
+        id, url, description,method
+        from sys_request_path
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="url != null and url != ''">
+                and url = #{url}
+            </if>
+            <if test="description != null and description != ''">
+                and description = #{description}
+            </if>
+            <if test="method!= null and method != ''">
+                and method = #{method}
+            </if>
+        </where>
+    </select>
+
+
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update sys_request_path
+        <set>
+            <if test="url != null and url != ''">
+                url = #{url},
+            </if>
+            <if test="description != null and description != ''">
+                description = #{description},
+            </if>
+            <if test="method != null and method != ''">
+                method = #{method},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from sys_request_path where id = #{id}
+    </delete>
+
+    <!--通过Pid 查找 -->
+    <select id="selectById" resultMap="BaseResultMap">
+        select r.id, url, description
+        from sys_permission p
+        left join sys_request_path_permission_relation  rp on
+        p.id = rp.permission_id
+        left join sys_request_path r on r.id=rp.url_id
+        where p.id=#{pid}
+    </select>
+    <!--通过Permission查找 -->
+    <select id="selectByPermission" resultMap="BaseResultMap">
+        select r.id, url, description
+        from sys_permission p
+        left join sys_request_path_permission_relation  rp on
+        p.id = rp.permission_id
+        left join sys_request_path r on r.id=rp.url_id
+        where permission_code=#{permission}
+    </select>
+    <!--通过url 查找 -->
+    <select id="selectByUrl" resultMap="BaseResultMap">
+        select id, url, description
+        from sys_request_path
+        where url=#{url}
+    </select>
+    <select id="list" resultMap="BaseResultMap">
+        select * from sys_request_path
+    </select>
+</mapper>

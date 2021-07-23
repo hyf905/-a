@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ateam05.hotel.mapper.SysUserMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ateam05.hotel.model.domain.SysUser">
+        <id column="id" property="id" />
+        <result column="account" property="account" />
+        <result column="user_name" property="userName" />
+        <result column="password" property="password" />
+        <result column="last_login_time" property="lastLoginTime" />
+        <result column="enabled" property="enabled" />
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="BaseResultMap">
+        select
+          id, account, user_name, password, last_login_time, enabled
+        from sys_user
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="BaseResultMap">
+        select
+          id, account, user_name, password, last_login_time, enabled
+        from sys_user
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="BaseResultMap">
+        select
+        id, account, user_name, password, last_login_time, enabled
+        from sys_user
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="account != null and account != ''">
+                and account = #{account}
+            </if>
+            <if test="userName != null and userName != ''">
+                and user_name = #{userName}
+            </if>
+            <if test="password != null and password != ''">
+                and password = #{password}
+            </if>
+            <if test="lastLoginTime != null">
+                and last_login_time = #{lastLoginTime}
+            </if>
+            <if test="enabled != null">
+                and enabled = #{enabled}
+            </if>
+            and  is_deleted = 0
+        </where>
+    </select>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update sys_user
+        <set>
+            <if test="account != null and account != ''">
+                account = #{account},
+            </if>
+            <if test="userName != null and userName != ''">
+                user_name = #{userName},
+            </if>
+            <if test="password != null and password != ''">
+                password = #{password},
+            </if>
+            <if test="lastLoginTime != null">
+                last_login_time = #{lastLoginTime},
+            </if>
+            <if test="enabled != null">
+                enabled = #{enabled},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--根据用户名查询用户-->
+    <select id="selectByName" resultMap="BaseResultMap">
+        select * from sys_user where account = #{userName};
+    </select>
+
+    <select id="list" resultType="com.ateam05.hotel.model.vo.SysUserVo">
+        select * from sys_user where is_deleted = 0;
+    </select>
+
+    <!--根据id查询角色-->
+    <select id="selectRoleById" resultType="com.ateam05.hotel.model.domain.SysRole">
+      SELECT
+        r.*
+        FROM
+        sys_role AS r
+        LEFT JOIN sys_user_role_relation AS ur
+        ON r.id = ur.role_id
+        LEFT JOIN sys_user AS u
+        ON u.id = ur.user_id
+        WHERE u.id = #{id}
+    </select>
+</mapper>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ateam05.hotel.mapper.HotelMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ateam05.hotel.model.domain.Hotel">
+        <id column="id" property="id" />
+        <result column="brand_id" property="brandId" />
+        <result column="brand_name" property="brandName" />
+        <result column="hotel_name_en" property="hotelNameEn" />
+        <result column="hotel_name_cn" property="hotelNameCn" />
+        <result column="address" property="address" />
+        <result column="city" property="city" />
+        <result column="star_rating" property="starRating" />
+        <result column="longitude" property="longitude" />
+        <result column="latitude" property="latitude" />
+        <result column="checkin" property="checkin" />
+        <result column="checkout" property="checkout" />
+        <result column="numberrooms" property="numberrooms" />
+        <result column="overview" property="overview" />
+        <result column="photo" property="photo" />
+        <result column="yearopened" property="yearopened" />
+        <result column="yearrenovated" property="yearrenovated" />
+        <result column="hoteltypeid" property="hoteltypeid" />
+        <result column="city_id" property="cityId" />
+        <result column="price" property="price" />
+        <result column="avgrate" property="avgrate" />
+    </resultMap>
+
+    <!-- 根据条件搜索酒店 -->
+    <select id="find" resultType="com.ateam05.hotel.model.domain.Hotel">
+        select *
+        from hotel
+        <where>
+            <if test="hotelNameCn != null and hotelNameCn != ''">
+                and hotel_name_cn like '%${hotelNameCn}%'
+            </if>
+            <if test="city != null and city != ''">
+                and city = #{city}
+            </if>
+            <if test="starRating != null and starRating != ''">
+                and star_rating = #{starRating}
+            </if>
+            <if test="hoteltypeid != null and hoteltypeid != ''">
+                and hoteltypeid = #{hoteltypeid}
+            </if>
+            <if test="bedtype != null and bedtype != ''">
+                and id in (select hotelid from roomtype where bedtype = #{bedtype})
+            </if>
+        </where>
+    </select>
+
+</mapper>
